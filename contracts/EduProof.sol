@@ -10,6 +10,8 @@ contract EduProof is Ownable {
     string name;
     string EIID;
     bytes32 secretHash;
+    bool isRegistered;
+    address _address;
   }
 
   enum EIStatus {
@@ -27,6 +29,8 @@ contract EduProof is Ownable {
   mapping(address => mapping(uint256 => bytes32)) public eTranscriptHash;
 
   mapping(address => EIDetail) public eiDetails;
+  mapping(uint256 => address) public idTOEIAddress;
+  uint256 public idCounter = 0;
 
   event RegisterEIID(
     address eiAddress,
@@ -39,22 +43,35 @@ contract EduProof is Ownable {
 
   event IssueTranscript(address eiAddress, uint256 studentID);
 
+  function getALLEI() public view returns(EIDetail[] memory) {
+      EIDetail[] memory eiPendingList = new EIDetail[](idCounter);
+      for(uint i=0;i<idCounter;i++) {
+        eiPendingList[i] = eiDetails[idTOEIAddress[i]];
+      }
+      return eiPendingList;
+  }
+
   function registerEIID(
     string calldata eiid,
     string calldata name,
     bytes32 secretHash
   ) public {
     require(
-      eiDetails[msg.sender].status == EIStatus.Pending,
-      "ALREADY_REGISTERD"
+      eiDetails[msg.sender].isRegistered == false,
+      "ALREADY_REGISTERED"
     );
+    
     eiDetails[msg.sender] = EIDetail({
       status: EIStatus.Pending,
       name: name,
       EIID: eiid,
-      secretHash: secretHash
+      secretHash: secretHash,
+      isRegistered: true,
+      _address: msg.sender
     });
-
+    
+    idTOEIAddress[idCounter] = msg.sender;
+    ++idCounter;
     emit RegisterEIID(msg.sender, name, eiid, secretHash);
   }
 
@@ -83,7 +100,7 @@ contract EduProof is Ownable {
     emit IssueTranscript(msg.sender, studentID);
   }
 
-  function verifyTransript(
+  function verifyTranscript(
     address eiAddress,
     uint256 studentID,
     bytes32 hash

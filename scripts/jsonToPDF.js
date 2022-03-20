@@ -271,7 +271,7 @@ const transcriptData = [
 const objOne = {
   id: "000001",
   issuerName: "KMITL",
-  issuerPublicKey: "0x1124124",
+  issuerPublicKey: "0xc967FFB70F433E1aE715d8AD4c9a9D16996E67F9",
   verificationType: "onChain",
   studentName: "Mr.A",
   studentID: "1234",
@@ -330,29 +330,20 @@ const generatePDF = (obj) => {
     });
     startYS1 = startSmallY + 10;
   }
-  doc.text(`id: ${obj.id}`, startXS1, startYS1);
-  startYS1 += 5;
-  doc.text(`issuerName: ${obj.issuerName}`, startXS1, startYS1);
-  startYS1 += 5;
-  doc.text(`issuerName: ${obj.issuerPublicKey}`, startXS1, startYS1);
-  startYS1 += 5;
-  doc.text(`studentName: ${obj.studentName}`, startXS1, startYS1);
-  startYS1 += 5;
-  doc.text(`studentID: ${obj.studentID}`, startXS1, startYS1);
-  startYS1 += 5;
-  doc.text(`educationType: ${obj.educationType}`, startXS1, startYS1);
+
+  doc.setProperties({
+    title: `${obj.id}`,
+    author: `${obj.issuerName}:${obj.issuerPublicKey}`,
+    subject: `${obj.studentName}:${obj.studentID}`,
+  });
 
   doc.save("test.pdf");
 };
 
-const hashEduJson = (obj) => {
-  const byte32Data = ethers.utils.toUtf8Bytes(JSON.stringify(obj));
+const hashEdu = (obj) => {
+  const byte32Data = ethers.utils.toUtf8Bytes(obj);
   const hash = ethers.utils.sha256(byte32Data);
   console.log(hash);
 };
 
-
-const pdfToJson = (pdfPath) => {};
-
 generatePDF(objOne);
-hashEduJson(objOne);
