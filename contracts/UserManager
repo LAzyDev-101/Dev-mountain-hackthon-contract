@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts v4.4.1 (token/ERC721/IERC721.sol)
+pragma solidity ^0.8.4;
+
+contract UserManager {
+
+    struct userDetails {
+        bool isActive;
+        string name;
+        uint256 registerAt;
+        uint256 revokeAt;
+    }
+
+    mapping (address => mapping(uint256 => string)) educationTranscript;
+
+    mapping (address => userDetails) educationWhitelist;
+
+    function issueTranscript(address EIID,uint256 studentId, string memory hash) public {
+        educationTranscript[EIID][studentId] = hash;
+
+    }
+
+    function RegisterEIID(address EIID,string refNumeber) public {
+        educationWhitelist[EIID].isActive = false;
+    }
+
+	function ApproveEIID(address EIID) public {
+        educationWhitelist[EIID].isActive = true;
+    }
+
+    function revokeEIID(address EIID) public {
+        educationWhitelist[EIID].isActive = false;
+    }
+
+}
