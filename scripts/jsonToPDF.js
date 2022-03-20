@@ -270,29 +270,23 @@ const transcriptData = [
 
 const objOne = {
   id: "000001",
-  issuer: {
-    name: "KMITL",
-    publicKey: "0x1124124",
-  },
+  issuerName: "KMITL",
+  issuerPublicKey: "0x1124124",
   verificationType: "onChain",
-  student: {
-    name: "Mr.A",
-  },
-  education: {
-    type: "transcript_university",
-    data: transcriptData,
-  },
+  studentName: "Mr.A",
+  educationType: "transcript_university",
+  data: transcriptData,
 };
 
 const generatePDF = (obj) => {
   var doc = new jsPDF();
 
-  var transcriptData = obj.education.data;
+  var transcriptData = obj.data;
 
   doc.setFont("times", "normal");
   doc.text("Faculty of ... .", 100, 15, null, null);
   doc.setFontSize(14);
-  doc.text(`Name: ${obj.student.name}`, 25, 25, null, null);
+  doc.text(`Name: ${obj.studentName}`, 25, 25, null, null);
   doc.text("Date of Birth: April,0,1999", 25, 30, null, null);
   doc.text("Student ID: 1212312121", 100, 30, null, null);
   doc.text("Date of Admission: 2017", 25, 35, null, null);
@@ -335,11 +329,21 @@ const generatePDF = (obj) => {
     });
     startYS1 = startSmallY + 10;
   }
+  doc.text(`id: ${obj.id}`, startXS1, startYS1);
+  startYS1 += 5;
+  doc.text(`issuerName: ${obj.issuerName}`, startXS1, startYS1);
+  startYS1 += 5;
+  doc.text(`issuerName: ${obj.issuerPublicKey}`, startXS1, startYS1);
+  startYS1 += 5;
+  doc.text(`studentName: ${obj.studentName}`, startXS1, startYS1);
+  startYS1 += 5;
+  doc.text(`educationType: ${obj.educationType}`, startXS1, startYS1);
+
   doc.save("test.pdf");
 };
 
 const hashEduJson = (obj) => {
- console.log(ethers.utils.keccak256(ethers.utils.toUtf8Bytes(obj)))
+  console.log(ethers.utils.keccak256(ethers.utils.toUtf8Bytes(obj)));
 };
 
 const pdfToJson = (pdfPath) => {};
