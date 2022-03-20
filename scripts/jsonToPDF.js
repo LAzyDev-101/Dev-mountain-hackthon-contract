@@ -1,4 +1,5 @@
 import { jsPDF } from "jspdf";
+import { ethers } from "ethers";
 
 const transcriptData = [
   {
@@ -280,13 +281,13 @@ const objOne = {
   education: {
     type: "transcript_university",
     data: transcriptData,
-  }
+  },
 };
 
 const generatePDF = (obj) => {
   var doc = new jsPDF();
 
-  var transcriptData = obj.education.data
+  var transcriptData = obj.education.data;
 
   doc.setFont("times", "normal");
   doc.text("Faculty of ... .", 100, 15, null, null);
@@ -334,14 +335,14 @@ const generatePDF = (obj) => {
     });
     startYS1 = startSmallY + 10;
   }
-  doc.save("test.pdf")
+  doc.save("test.pdf");
 };
 
-const pdfToJson = (pdfPath) => {
+const hashEduJson = (obj) => {
+ console.log(ethers.utils.keccak256(ethers.utils.toUtf8Bytes(obj)))
+};
 
-} 
+const pdfToJson = (pdfPath) => {};
 
-generatePDF(objOne)
-
-
-
+generatePDF(objOne);
+hashEduJson(objOne);
