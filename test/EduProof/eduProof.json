@@ -2,23 +2,19 @@
   "id": "000001",
   "issuer": {
     "name": "KMITL",
-    "identity": "Educational Institution",
-    "verification": {
-      "publicKey": "0x124124safAfxv"
-    }
+    "publicKey": "0x124124safAfxv"
   },
   "student": {
     "name": "Mr.A"
   },
   "issuedOn": "2016-12-31T23:59:59+00:00",
-  "verification": {
-    "type": "onChain"
-  },
+  "verificationType": "onChain",
   "education": {
     "type": "transcript-university",
     "data": [
       {
         "term": "1",
+        "year": "2017",
         "grade": [
           {
             "subject_a": "aaa",
@@ -29,9 +25,80 @@
       },
       {
         "term": "2",
+        "year": "2017",
+        "grade": [
+          {
+            "subject_id": "01123412",
+            "subject_name": "aaa",
+            "grade": "A",
+            "credit": 3
+          }
+        ]
+      },
+      {
+        "term": "1",
+        "year": "2018",
         "grade": [
           {
             "subject_a": "aaa",
+            "grade": "A",
+            "credit": 3
+          }
+        ]
+      },
+      {
+        "term": "2",
+        "year": "2018",
+        "grade": [
+          {
+            "subject_id": "01123412",
+            "subject_name": "aaa",
+            "grade": "A",
+            "credit": 3
+          }
+        ]
+      },
+      {
+        "term": "1",
+        "year": "2019",
+        "grade": [
+          {
+            "subject_a": "aaa",
+            "grade": "A",
+            "credit": 3
+          }
+        ]
+      },
+      {
+        "term": "2",
+        "year": "2019",
+        "grade": [
+          {
+            "subject_id": "01123412",
+            "subject_name": "aaa",
+            "grade": "A",
+            "credit": 3
+          }
+        ]
+      },
+      {
+        "term": "1",
+        "year": "2020",
+        "grade": [
+          {
+            "subject_a": "aaa",
+            "grade": "A",
+            "credit": 3
+          }
+        ]
+      },
+      {
+        "term": "2",
+        "year": "2020",
+        "grade": [
+          {
+            "subject_id": "01123412",
+            "subject_name": "aaa",
             "grade": "A",
             "credit": 3
           }

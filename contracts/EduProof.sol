@@ -8,12 +8,14 @@ contract EduProof is Ownable {
   struct EIDetail {
     EIStatus status;
     string name;
+    string EIID;
+    string secretHash;
   }
 
   enum EIStatus {
     Pending,
     Approved,
-    Rovoked
+    Revoked
   }
 
   struct VerifyData {
@@ -25,31 +27,46 @@ contract EduProof is Ownable {
 
   mapping(address => EIDetail) public eiDetails;
 
-  event RegisterEIID(address eiAddress, string name);
+  event RegisterEIID(
+    address eiAddress,
+    string name,
+    string eiid,
+    string secretHash
+  );
   event ApproveEIID(address eiAddress);
   event RevokeEIID(address eiAddress);
 
   event IssueTranscript(address eiAddress, uint256 studentID);
 
-  function registerEIID(address eiAddress, string calldata name) public {
-    eiDetails[eiAddress] = EIDetail({ EIStatus: EIStatus.Pending, name: name });
+  function registerEIID(
+    string calldata eiid,
+    string calldata name,
+    string calldata secretHash
+  ) public {
+    require(eiDetails[msg.sender] != EIStatus.Pending, "ALREADY_REGISTERD");
+    eiDetails[msg.sender] = EIDetail({
+      status: EIStatus.Pending,
+      name: name,
+      EIID: eiid,
+      secretHash: secretHash
+    });
 
-    emit RegisterEIID(eiAddress, name);
+    emit RegisterEIID(eiAddress, name, eiid, secretHash);
   }
 
   function approveEIID(address eiAddress) public onlyOwner {
-    eiDetail[EIID].status = EIStatus.Approved;
+    eiDetails[eiAddress].status = EIStatus.Approved;
     emit ApproveEIID(eiAddress);
   }
 
   function revokeEIID(address eiAddress) public onlyOwner {
-    eiDetail[EIID].status = EIStatus.Revoked;
+    eiDetails[eiAddress].status = EIStatus.Revoked;
     emit RevokeEIID(eiAddress);
   }
 
   function issueTranscript(uint256 studentID, string calldata hash) public {
     EIDetail memory eiDetail = eiDetails[msg.sender];
-    require(eiDetail.isActive == true, "NOT_ALLOW");
+    require(eiDetail.status == EIStatus.Approved, "NOT_ALLOWED");
 
     eTranscriptHash[msg.sender][studentID] = hash;
 
@@ -59,11 +76,23 @@ contract EduProof is Ownable {
   function verifyTransript(
     address eiAddress,
     uint256 studentID,
-    string calldata hash
+    string memory hash
   ) public view returns (VerifyData memory data) {
+    string memory hashInChain = eTranscriptHash[eiAddress][studentID];
     VerifyData memory data = VerifyData({
       eiDetail: eiDetails[eiAddress],
-      isCorrect: hash == eTranscriptHash[eiAddress][studentID]
+      isCorrect: _hashCompare(hashInChain, hash)
     });
+    return data
+  }
+
+  function _hashCompare(string memory hash1, string memory hash2)
+    internal
+    view
+    returns (bool)
+  {
+    return
+      keccak256(abi.encodePacked((hash1))) ==
+      keccak256(abi.encodePacked((hash2)));
   }
 }
