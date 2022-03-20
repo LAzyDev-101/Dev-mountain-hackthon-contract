@@ -343,10 +343,13 @@ const generatePDF = (obj) => {
 };
 
 const hashEduJson = (obj) => {
-  console.log(ethers.utils.keccak256(ethers.utils.toUtf8Bytes(obj)));
+  const byte32Data = ethers.utils.toUtf8Bytes(obj);
+  const hash = ethers.utils.sha256(byte32Data);
+  console.log(hash);
 };
 
 const pdfToJson = (pdfPath) => {};
 
 generatePDF(objOne);
 hashEduJson(objOne);
+hashEduJson("testSecret");

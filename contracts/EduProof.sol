@@ -9,7 +9,7 @@ contract EduProof is Ownable {
     EIStatus status;
     string name;
     string EIID;
-    string secretHash;
+    bytes32 secretHash;
   }
 
   enum EIStatus {
@@ -23,7 +23,7 @@ contract EduProof is Ownable {
     bool isCorrect;
   }
 
-  mapping(address => mapping(uint256 => string)) public eTranscriptHash;
+  mapping(address => mapping(uint256 => bytes32)) public eTranscriptHash;
 
   mapping(address => EIDetail) public eiDetails;
 
@@ -31,7 +31,7 @@ contract EduProof is Ownable {
     address eiAddress,
     string name,
     string eiid,
-    string secretHash
+    bytes32 secretHash
   );
   event ApproveEIID(address eiAddress);
   event RevokeEIID(address eiAddress);
@@ -41,9 +41,12 @@ contract EduProof is Ownable {
   function registerEIID(
     string calldata eiid,
     string calldata name,
-    string calldata secretHash
+    bytes32 secretHash
   ) public {
-    require(eiDetails[msg.sender].status != EIStatus.Pending, "ALREADY_REGISTERD");
+    require(
+      eiDetails[msg.sender].status == EIStatus.Pending,
+      "ALREADY_REGISTERD"
+    );
     eiDetails[msg.sender] = EIDetail({
       status: EIStatus.Pending,
       name: name,
@@ -54,8 +57,14 @@ contract EduProof is Ownable {
     emit RegisterEIID(msg.sender, name, eiid, secretHash);
   }
 
-  function approveEIID(address eiAddress) public onlyOwner {
-    eiDetails[eiAddress].status = EIStatus.Approved;
+  function approveEIID(address eiAddress, string memory secretWord)
+    public
+    onlyOwner
+  {
+    EIDetail storage eiDetail = eiDetails[eiAddress];
+    require(eiDetail.secretHash == _hashString(secretWord), "INVALID_SECRET");
+    eiDetail.status = EIStatus.Approved;
+
     emit ApproveEIID(eiAddress);
   }
 
@@ -64,7 +73,7 @@ contract EduProof is Ownable {
     emit RevokeEIID(eiAddress);
   }
 
-  function issueTranscript(uint256 studentID, string calldata hash) public {
+  function issueTranscript(uint256 studentID, bytes32 hash) public {
     EIDetail memory eiDetail = eiDetails[msg.sender];
     require(eiDetail.status == EIStatus.Approved, "NOT_ALLOWED");
 
@@ -76,9 +85,9 @@ contract EduProof is Ownable {
   function verifyTransript(
     address eiAddress,
     uint256 studentID,
-    string memory hash
-  ) public view returns (VerifyData memory data) {
-    string memory hashInChain = eTranscriptHash[eiAddress][studentID];
+    bytes32 hash
+  ) public view returns (VerifyData memory) {
+    bytes32 hashInChain = eTranscriptHash[eiAddress][studentID];
     VerifyData memory data = VerifyData({
       eiDetail: eiDetails[eiAddress],
       isCorrect: _hashCompare(hashInChain, hash)
@@ -87,13 +96,15 @@ contract EduProof is Ownable {
     return data;
   }
 
-  function _hashCompare(string memory hash1, string memory hash2)
+  function _hashCompare(bytes32 hash1, bytes32 hash2)
     internal
-    view
+    pure
     returns (bool)
   {
-    return
-      keccak256(abi.encodePacked((hash1))) ==
-      keccak256(abi.encodePacked((hash2)));
+    return hash1 == hash2;
+  }
+
+  function _hashString(string memory data) public pure returns (bytes32) {
+    return sha256(abi.encodePacked(data));
   }
 }
