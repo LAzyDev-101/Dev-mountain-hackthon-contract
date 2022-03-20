@@ -1,4 +1,4 @@
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 
 const transcriptData = [
   {
@@ -337,7 +337,7 @@ const generatePDF = (obj) => {
   doc.save("test.pdf")
 };
 
-const pdfToJson = () => {
+const pdfToJson = (pdfPath) => {
 
 } 
 
