@@ -20,7 +20,7 @@ contract EduProof is Ownable {
 
   struct VerifyData {
     EIDetail eiDetail;
-    bool isCorret;
+    bool isCorrect;
   }
 
   mapping(address => mapping(uint256 => string)) public eTranscriptHash;
@@ -43,7 +43,7 @@ contract EduProof is Ownable {
     string calldata name,
     string calldata secretHash
   ) public {
-    require(eiDetails[msg.sender] != EIStatus.Pending, "ALREADY_REGISTERD");
+    require(eiDetails[msg.sender].status != EIStatus.Pending, "ALREADY_REGISTERD");
     eiDetails[msg.sender] = EIDetail({
       status: EIStatus.Pending,
       name: name,
@@ -51,7 +51,7 @@ contract EduProof is Ownable {
       secretHash: secretHash
     });
 
-    emit RegisterEIID(eiAddress, name, eiid, secretHash);
+    emit RegisterEIID(msg.sender, name, eiid, secretHash);
   }
 
   function approveEIID(address eiAddress) public onlyOwner {
@@ -83,7 +83,8 @@ contract EduProof is Ownable {
       eiDetail: eiDetails[eiAddress],
       isCorrect: _hashCompare(hashInChain, hash)
     });
-    return data
+
+    return data;
   }
 
   function _hashCompare(string memory hash1, string memory hash2)

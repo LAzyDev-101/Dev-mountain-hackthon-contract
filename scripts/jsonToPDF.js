@@ -268,28 +268,30 @@ const transcriptData = [
 ];
 
 const objOne = {
-  id: obj.id,
+  id: "000001",
   issuer: {
-    name: obj.issuer,
-    publicKey: obj.issuerPublicKey,
+    name: "KMITL",
+    publicKey: "0x1124124",
   },
   verificationType: "onChain",
   student: {
-    name: obj.studentName,
+    name: "Mr.A",
   },
-  educuation: {
-    type: obj.transcriptType,
-    data: obj.transcriptData,
+  education: {
+    type: "transcript_university",
+    data: transcriptData,
   }
 };
 
 const generatePDF = (obj) => {
   var doc = new jsPDF();
 
+  var transcriptData = obj.education.data
+
   doc.setFont("times", "normal");
   doc.text("Faculty of ... .", 100, 15, null, null);
   doc.setFontSize(14);
-  doc.text("Name: Mr.A ABC", 25, 25, null, null);
+  doc.text(`Name: ${obj.student.name}`, 25, 25, null, null);
   doc.text("Date of Birth: April,0,1999", 25, 30, null, null);
   doc.text("Student ID: 1212312121", 100, 30, null, null);
   doc.text("Date of Admission: 2017", 25, 35, null, null);
@@ -297,11 +299,9 @@ const generatePDF = (obj) => {
   doc.text("Degree: Bachelor Of Engineering", 25, 40, null, null);
   doc.text("Major: Computer Engineering", 25, 45, null, null);
 
-  const lineHeight = 6;
   let startXS1 = 25;
   let startYS1 = 55;
   const smallLineHeight = 4;
-  const smallSpace = 25;
   for (var i = 0; i < 8; i++) {
     if (startYS1 >= 230) {
       startXS1 = 110;
@@ -320,15 +320,13 @@ const generatePDF = (obj) => {
     doc.setFontSize(12);
     startYS1 += smallLineHeight;
     var startSmallY = startYS1;
-    var startSmallX = startXS1;
-    var count = 0;
     transcriptData[i].grade.map((v) => {
       var startSmallX = startXS1;
       startSmallY += smallLineHeight;
 
       doc.text(`${v.subjectID}`, startSmallX, startSmallY);
       startSmallX += 20;
-      doc.text(`${v.subjectName}`, startSmallX, startSmalY);
+      doc.text(`${v.subjectName}`, startSmallX, startSmallY);
       startSmallX += 35;
       doc.text(`${v.credit}`, startSmallX, startSmallY);
       startSmallX += 5;
@@ -336,4 +334,14 @@ const generatePDF = (obj) => {
     });
     startYS1 = startSmallY + 10;
   }
+  doc.save("test.pdf")
 };
+
+const pdfToJson = () => {
+
+} 
+
+generatePDF(objOne)
+
+
+

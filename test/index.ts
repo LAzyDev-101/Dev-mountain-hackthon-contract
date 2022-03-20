@@ -20,8 +20,7 @@ describe("Runing Testing all Smart Contract", function() {
     global.currentStepInfo = {};
   });
 
-  require('./PetToken');
-  require('./Market');
+  require('./EduProof');
 
   after(function() {
   });
