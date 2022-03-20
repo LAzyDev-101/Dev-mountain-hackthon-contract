@@ -19,7 +19,8 @@ contract EduProof is Ownable {
   }
 
   struct VerifyData {
-    EIDetail eiDetail;
+    string issuerName;
+    address issuerPublicKey;
     bool isCorrect;
   }
 
@@ -89,7 +90,8 @@ contract EduProof is Ownable {
   ) public view returns (VerifyData memory) {
     bytes32 hashInChain = eTranscriptHash[eiAddress][studentID];
     VerifyData memory data = VerifyData({
-      eiDetail: eiDetails[eiAddress],
+      issuerName:eiDetails[eiAddress].name,
+      issuerPublicKey:eiAddress,
       isCorrect: _hashCompare(hashInChain, hash)
     });
 

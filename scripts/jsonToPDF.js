@@ -274,6 +274,7 @@ const objOne = {
   issuerPublicKey: "0x1124124",
   verificationType: "onChain",
   studentName: "Mr.A",
+  studentID: "1234",
   educationType: "transcript_university",
   data: transcriptData,
 };
@@ -337,19 +338,21 @@ const generatePDF = (obj) => {
   startYS1 += 5;
   doc.text(`studentName: ${obj.studentName}`, startXS1, startYS1);
   startYS1 += 5;
+  doc.text(`studentID: ${obj.studentID}`, startXS1, startYS1);
+  startYS1 += 5;
   doc.text(`educationType: ${obj.educationType}`, startXS1, startYS1);
 
   doc.save("test.pdf");
 };
 
 const hashEduJson = (obj) => {
-  const byte32Data = ethers.utils.toUtf8Bytes(obj);
+  const byte32Data = ethers.utils.toUtf8Bytes(JSON.stringify(obj));
   const hash = ethers.utils.sha256(byte32Data);
   console.log(hash);
 };
+
 
 const pdfToJson = (pdfPath) => {};
 
 generatePDF(objOne);
 hashEduJson(objOne);
-hashEduJson("testSecret");
