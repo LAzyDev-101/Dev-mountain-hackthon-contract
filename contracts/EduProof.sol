@@ -43,12 +43,12 @@ contract EduProof is Ownable {
 
   event IssueTranscript(address eiAddress, uint256 studentID);
 
-  function getALLEI() public view returns(EIDetail[] memory) {
-      EIDetail[] memory eiPendingList = new EIDetail[](idCounter);
-      for(uint i=0;i<idCounter;i++) {
-        eiPendingList[i] = eiDetails[idTOEIAddress[i]];
-      }
-      return eiPendingList;
+  function getALLEI() public view returns (EIDetail[] memory) {
+    EIDetail[] memory eiPendingList = new EIDetail[](idCounter);
+    for (uint256 i = 0; i < idCounter; i++) {
+      eiPendingList[i] = eiDetails[idTOEIAddress[i]];
+    }
+    return eiPendingList;
   }
 
   function registerEIID(
@@ -56,11 +56,8 @@ contract EduProof is Ownable {
     string calldata name,
     bytes32 secretHash
   ) public {
-    require(
-      eiDetails[msg.sender].isRegistered == false,
-      "ALREADY_REGISTERED"
-    );
-    
+    require(eiDetails[msg.sender].isRegistered == false, "ALREADY_REGISTERED");
+
     eiDetails[msg.sender] = EIDetail({
       status: EIStatus.Pending,
       name: name,
@@ -69,7 +66,7 @@ contract EduProof is Ownable {
       isRegistered: true,
       _address: msg.sender
     });
-    
+
     idTOEIAddress[idCounter] = msg.sender;
     ++idCounter;
     emit RegisterEIID(msg.sender, name, eiid, secretHash);
@@ -107,8 +104,8 @@ contract EduProof is Ownable {
   ) public view returns (VerifyData memory) {
     bytes32 hashInChain = eTranscriptHash[eiAddress][studentID];
     VerifyData memory data = VerifyData({
-      issuerName:eiDetails[eiAddress].name,
-      issuerPublicKey:eiAddress,
+      issuerName: eiDetails[eiAddress].name,
+      issuerPublicKey: eiAddress,
       isCorrect: _hashCompare(hashInChain, hash)
     });
 
