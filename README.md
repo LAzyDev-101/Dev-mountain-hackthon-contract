@@ -22,7 +22,7 @@ The main goal is want to removes suspicion about the certificatecontent and the 
 
 ### Ours solutions
 We created a platform named **Eduprove** (Certificate verification online platform)
-That storing hashing of certificate data on blockchain and using some whitelist flow with centralized organization that issuer educational institution
+By hashing certificate data issued from whitelisted educational institutions and storing it on the blockchain.
 
 
 ## Our team member
