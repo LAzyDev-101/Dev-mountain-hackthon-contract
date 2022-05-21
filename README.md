@@ -4,7 +4,7 @@
 ## What is Dev. Mountain Tech Festival  
 
 **Dev. Mountain Tech Festival** is a Thailand tech event that held at
-18-20 March 2022 Toscana Valley Khao Yai. This event has many top-tier Thai developers as speaker and has many different topics for developers or anyone who interested in technology
+18-20 March 2022 Toscana Valley Khao Yai. This event has many top-tier Thai developers as speaker and has many different topics for developers or anyone who interested in technology.
 in additional, this tech event also has blockchain hackathon inside it.
 In this hackathon, participants have to pass an online smart contract competition. Finally, there were 5 teams participating in the main event and facing 5 unique domains, which come from different businesses. The owner of each problem also entered and waited to hear how competitors use blockchain to solve their problems effectively in this event.
 [Facebook page](https://www.facebook.com/devmountaintechfestival/?ref=page_internal)
